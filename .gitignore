@@ -1,0 +1,23 @@
+# General
+.DS_Store
+.vscode/
+.idea/
+.env/
+
+
+# Node.js / React
+frontend/node_modules/
+frontend/.next/
+frontend/.parcel-cache/
+frontend/.turbo/
+frontend/dist/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.production.local
+frontend/.env.test.local
+
+# Dependency files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
