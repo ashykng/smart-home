@@ -1,9 +1,10 @@
 import './App.css'
+import Data from './components/Data/Data'
 
 function App() {
 
     return (
-        <h1>Test</h1>
+        <Data />
     )
 }
 
