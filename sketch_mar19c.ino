@@ -3,6 +3,7 @@
 #include <DHT.h>
 #include <ArduinoJson.h>
 #include <ESPAsyncWebServer.h>
+#include <FastLED.h>
 
 const char* ssid = "Ashkan's ESP32";
 const char* password = "password";
@@ -18,31 +19,47 @@ DHT dht(DHT_PIN, DHT_TYPE);
 #define SCL 18
 #define SDO 19
 
+#define NUM_LEDS 8
+#define LED_PIN 16
+
+CRGB leds[NUM_LEDS];
+CRGB red = CRGB::Green;
+CRGB green = CRGB::Red;
+CRGB blue = CRGB::Blue;
+CRGB white = CRGB::White;
+CRGB turnOff = CRGB::Black;
+
 float temperature, humidity;
-int lightLevel, pressedKey, servoDegree;
+int lightLevel, pressedKey;
 bool buzzer = false;
+bool heater = false;
+bool light = false;
 
 void setup() {
   Wire.begin();
   Serial.begin(115200);
   dht.begin();
 
+  FastLED.addLeds<WS2812, LED_PIN>(leds, NUM_LEDS);
+
   pinMode(SCL, OUTPUT);
   pinMode(SDO, INPUT);
   pinMode(BUZZER_PIN, OUTPUT);
 
-  delay(1000);
+  ledFullColor(white);
   startServer();
+
 }
 
 void loop() {
+
   readKeypad(pressedKey);
   keyFunctions(pressedKey);
 
   readDHT(temperature, humidity);
   readLDR(lightLevel);
 
-  soundBuzzer(buzzer);
+  showFullStatus();
 
   delay(500);
 }
@@ -67,6 +84,8 @@ void setupRoutes() {
   server.on("/api/data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<256> json;
     json["buzzer"] = buzzer;
+    json["heater"] = heater;
+    json["light"] = light;
     json["light Level"] = String(lightLevel) + " %";
     json["pressed Key"] = pressedKey;
     json["temperature"] = String(temperature) + " °C";
@@ -77,10 +96,30 @@ void setupRoutes() {
     request->send(200, "application/json", jsonResponse);
   });
 
-  server.on("/api/toggle", HTTP_GET, [](AsyncWebServerRequest *request) {
-    buzzer = !buzzer;
+  server.on("/api/toggle/buzzer", HTTP_GET, [](AsyncWebServerRequest *request) {
+    buzzerOn(buzzer);
     StaticJsonDocument<64> json;
     json["buzzer"] = buzzer;
+
+    String jsonResponse;
+    serializeJson(json, jsonResponse);
+    request->send(200, "application/json", jsonResponse);
+  });
+
+  server.on("/api/toggle/heater", HTTP_GET, [](AsyncWebServerRequest *request) {
+    heaterOn(heater);
+    StaticJsonDocument<64> json;
+    json["heater"] = heater;
+
+    String jsonResponse;
+    serializeJson(json, jsonResponse);
+    request->send(200, "application/json", jsonResponse);
+  });
+
+  server.on("/api/toggle/light", HTTP_GET, [](AsyncWebServerRequest *request) {
+    lightOn(light);
+    StaticJsonDocument<64> json;
+    json["light"] = light;
 
     String jsonResponse;
     serializeJson(json, jsonResponse);
@@ -109,10 +148,67 @@ void readKeypad(int &pressedKey) {
 }
 
 void keyFunctions(int &pressedKey) {
-  if (pressedKey == 1) buzzer = !buzzer;
+  if (pressedKey != -1)
+    if (pressedKey == 1) buzzerOn(buzzer);
+    else if (pressedKey == 2) heaterOn(heater);
+    else if (pressedKey == 3) lightOn(light);
+    else alarm();
 }
 
-void soundBuzzer(bool &buzzer) {
+void buzzerOn(bool &buzzer) {
+  buzzer = !buzzer;
   if (buzzer) tone(BUZZER_PIN, 2500);
   else noTone(BUZZER_PIN);
+}
+
+void showTemperature(float &temperature) {
+  for(int i = 0; i <= temperature / 10; i++) {
+    leds[i] = red;
+    FastLED.show();
+  }
+}
+
+void showState(bool &state, int led) {
+  if (state) leds[led] = red;
+  else leds[led] = blue;
+  FastLED.show();
+}
+
+void heaterOn(bool &heater) {
+  heater = !heater;
+  if (heater) ledFullColor(red);
+  else ledFullColor(blue);
+}
+
+void lightOn(bool &light) {
+  light = !light;
+  if (light) ledFullColor(red);
+  else ledFullColor(blue);
+}
+
+void ledFullColor(CRGB color) {
+  for(int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = color;
+    FastLED.show();
+  }
+
+  delay(500);
+
+  for(int i = 0; i < NUM_LEDS; i++)
+    leds[i] = turnOff;
+
+  leds[4] = white;
+  FastLED.show();
+}
+
+void showFullStatus() {
+  showTemperature(temperature);
+  showState(buzzer, 7);
+  showState(heater, 6);
+  showState(light, 5);
+}
+
+void alarm() {
+  ledFullColor(red);
+  ledFullColor(blue);
 }
