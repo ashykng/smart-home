@@ -34,6 +34,8 @@ int lightLevel, pressedKey;
 bool buzzer = false;
 bool heater = false;
 bool light = false;
+int temperatureLimit = 30;
+int lightLevelLimit = 30;
 
 void setup() {
   Wire.begin();
@@ -58,6 +60,8 @@ void loop() {
 
   readDHT(temperature, humidity);
   readLDR(lightLevel);
+
+  checkLimits(temperatureLimit, lightLevelLimit);
 
   showFullStatus();
 
@@ -211,4 +215,9 @@ void showFullStatus() {
 void alarm() {
   ledFullColor(red);
   ledFullColor(blue);
+}
+
+void checkLimits(int &temperatureLimit, int &lightLevelLimit) {
+  if (lightLevel < lightLevelLimit && !light) lightOn(light);
+  if (temperature < temperatureLimit && !heater) heaterOn(heater);
 }
