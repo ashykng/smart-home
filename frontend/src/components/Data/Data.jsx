@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { endpoints, API_URL } from '../../../config'
-import { CardDefault } from '../general/card/card'
+import { CardDefault } from '../general/Card/Card'
 
 import { HiSpeakerWave } from "react-icons/hi2"
 import { FaLightbulb, FaTemperatureHigh } from "react-icons/fa"
