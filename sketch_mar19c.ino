@@ -27,6 +27,8 @@ CRGB red = CRGB::Green;
 CRGB green = CRGB::Red;
 CRGB blue = CRGB::Blue;
 CRGB white = CRGB::White;
+CRGB yellow = CRGB::Yellow;
+CRGB maroon = CRGB::Maroon;
 CRGB turnOff = CRGB::Black;
 
 float temperature, humidity;
@@ -34,12 +36,12 @@ int lightLevel, pressedKey;
 bool buzzer = false;
 bool heater = false;
 bool light = false;
-int temperatureLimit = 30;
+bool safeMode = true;
+int temperatureLimit = 35;
 int lightLevelLimit = 30;
 
 void setup() {
   Wire.begin();
-  Serial.begin(115200);
   dht.begin();
 
   FastLED.addLeds<WS2812, LED_PIN>(leds, NUM_LEDS);
@@ -68,6 +70,26 @@ void loop() {
   delay(500);
 }
 
+void setHeater(bool &heater, bool state) {
+  heater = state;
+}
+
+void setLight(bool &light, bool state) {
+    light = state;
+}
+
+void toggleHeater(bool &heater) {
+  heater = !heater;
+}
+
+void toggleLight(bool &light) {
+  light = !light;
+}
+
+void toggleSafeMode(bool &safeMode) {
+  safeMode = !safeMode;
+}
+
 void startServer() {
   WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
@@ -87,6 +109,7 @@ void startServer() {
 void setupRoutes() {
   server.on("/api/data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<256> json;
+    json["safeMode"] = safeMode;
     json["buzzer"] = buzzer;
     json["heater"] = heater;
     json["light"] = light;
@@ -101,7 +124,7 @@ void setupRoutes() {
   });
 
   server.on("/api/toggle/buzzer", HTTP_GET, [](AsyncWebServerRequest *request) {
-    buzzerOn(buzzer);
+    toggleBuzzer(buzzer);
     StaticJsonDocument<64> json;
     json["buzzer"] = buzzer;
 
@@ -111,7 +134,7 @@ void setupRoutes() {
   });
 
   server.on("/api/toggle/heater", HTTP_GET, [](AsyncWebServerRequest *request) {
-    heaterOn(heater);
+    toggleHeater(heater);
     StaticJsonDocument<64> json;
     json["heater"] = heater;
 
@@ -121,9 +144,19 @@ void setupRoutes() {
   });
 
   server.on("/api/toggle/light", HTTP_GET, [](AsyncWebServerRequest *request) {
-    lightOn(light);
+    toggleLight(light);
     StaticJsonDocument<64> json;
     json["light"] = light;
+
+    String jsonResponse;
+    serializeJson(json, jsonResponse);
+    request->send(200, "application/json", jsonResponse);
+  });
+
+  server.on("/api/toggle/safe", HTTP_GET, [](AsyncWebServerRequest *request) {
+    toggleSafeMode(safeMode);
+    StaticJsonDocument<64> json;
+    json["safe"] = safeMode;
 
     String jsonResponse;
     serializeJson(json, jsonResponse);
@@ -153,13 +186,21 @@ void readKeypad(int &pressedKey) {
 
 void keyFunctions(int &pressedKey) {
   if (pressedKey != -1)
-    if (pressedKey == 1) buzzerOn(buzzer);
-    else if (pressedKey == 2) heaterOn(heater);
-    else if (pressedKey == 3) lightOn(light);
+
+    if (!safeMode) {
+      if (pressedKey == 1) toggleBuzzer(buzzer);
+      else if (pressedKey == 2) toggleHeater(heater);
+      else if (pressedKey == 3) toggleLight(light);
+      else if (pressedKey == 8) toggleSafeMode(safeMode);
+    }
+
+    else if (pressedKey == 8) toggleSafeMode(safeMode);
+
     else alarm();
+
 }
 
-void buzzerOn(bool &buzzer) {
+void toggleBuzzer(bool &buzzer) {
   buzzer = !buzzer;
   if (buzzer) tone(BUZZER_PIN, 2500);
   else noTone(BUZZER_PIN);
@@ -172,22 +213,14 @@ void showTemperature(float &temperature) {
   }
 }
 
-void showState(bool &state, int led) {
-  if (state) leds[led] = red;
-  else leds[led] = blue;
+void showSafeMode(bool &safeMode) {
+  if (safeMode) leds[4] = green;
+}
+
+void showState(bool &state, int led, CRGB onColor, CRGB offColor) {
+  if (state) leds[led] = onColor;
+  else leds[led] = offColor;
   FastLED.show();
-}
-
-void heaterOn(bool &heater) {
-  heater = !heater;
-  if (heater) ledFullColor(red);
-  else ledFullColor(blue);
-}
-
-void lightOn(bool &light) {
-  light = !light;
-  if (light) ledFullColor(red);
-  else ledFullColor(blue);
 }
 
 void ledFullColor(CRGB color) {
@@ -207,17 +240,21 @@ void ledFullColor(CRGB color) {
 
 void showFullStatus() {
   showTemperature(temperature);
-  showState(buzzer, 7);
-  showState(heater, 6);
-  showState(light, 5);
+  showState(buzzer, 7, red, white);
+  showState(heater, 6, maroon, blue);
+  showState(light, 5, yellow, turnOff);
+  showState(safeMode, 4, green, red);
 }
 
 void alarm() {
+  toggleBuzzer(buzzer);
   ledFullColor(red);
   ledFullColor(blue);
+  toggleBuzzer(buzzer);
 }
 
 void checkLimits(int &temperatureLimit, int &lightLevelLimit) {
-  if (lightLevel < lightLevelLimit && !light) lightOn(light);
-  if (temperature < temperatureLimit && !heater) heaterOn(heater);
+  if (lightLevel < lightLevelLimit && !light) setLight(light, true);
+
+  if (temperature < temperatureLimit && !heater) setHeater(heater, true);
 }
