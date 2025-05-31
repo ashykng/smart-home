@@ -4,7 +4,7 @@ import { endpoints, API_URL } from '../../../config'
 import { CardDefault } from '../general/Card/Card'
 
 import { HiSpeakerWave } from "react-icons/hi2"
-import { FaLightbulb, FaTemperatureHigh } from "react-icons/fa"
+import { FaLightbulb, FaTemperatureHigh, FaUserLock } from "react-icons/fa"
 import { FaKeyboard } from 'react-icons/fa6'
 import { WiHumidity } from "react-icons/wi"
 import { LuHeater } from "react-icons/lu"
@@ -13,6 +13,10 @@ export default function Data() {
     const [data, setData] = useState({})
 
     const cardConfig = {
+        'safeMode': {
+            toggleApi: `${API_URL}/toggle/safe`,
+            icon: <FaUserLock className="w-6 h-6" />
+        },
         'buzzer': {
             toggleApi: `${API_URL}/toggle/buzzer`,
             icon: <HiSpeakerWave className="text-gray-600 w-6 h-6" />
@@ -69,7 +73,9 @@ export default function Data() {
                             data={value}
                             toggleApi={config.toggleApi || null}
                             icon={config.icon || null}
+                            safeMode={data.safeMode}
                         />
+
                     )
                 })}
             </div>
