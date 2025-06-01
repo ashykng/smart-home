@@ -93,9 +93,6 @@ void toggleSafeMode(bool &safeMode) {
 void startServer() {
   WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
-  
-  Serial.print("ESP32 IP Address: ");
-  Serial.println(IP);
 
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, POST");
