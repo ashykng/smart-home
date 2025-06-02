@@ -14,19 +14,19 @@ export default function Data() {
 
     const cardConfig = {
         'safeMode': {
-            toggleApi: `${API_URL}/toggle/safe`,
+            toggleApi: endpoints.toggleSafeMode,
             icon: <FaUserLock className="w-6 h-6" />
         },
         'buzzer': {
-            toggleApi: `${API_URL}/toggle/buzzer`,
+            toggleApi: endpoints.toggleBuzzer,
             icon: <HiSpeakerWave className="text-gray-600 w-6 h-6" />
         },
         'light': {
-            toggleApi: `${API_URL}/toggle/light`,
+            toggleApi: endpoints.toggleLight,
             icon: <FaLightbulb className="text-yellow-500 w-6 h-6" />
         },
         'heater': {
-            toggleApi: `${API_URL}/toggle/heater`,
+            toggleApi: endpoints.toggleHeater,
             icon: <LuHeater className="text-red-500 w-6 h-6" />
         },
         'light Level': {
