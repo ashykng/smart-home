@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { endpoints, API_URL } from '../../../config'
-import { CardDefault } from '../general/Card/Card'
+import { endpoints } from '../../../config'
+
+import { GeneralCard } from '../general/Card/Card'
 
 import { HiSpeakerWave } from "react-icons/hi2"
 import { FaLightbulb, FaTemperatureHigh, FaUserLock } from "react-icons/fa"
@@ -67,7 +68,7 @@ export default function Data() {
                 {data && Object.entries(data).map(([key, value]) => {
                     const config = cardConfig[key] || {}
                     return (
-                        <CardDefault
+                        <GeneralCard
                             key={key}
                             title={key.toUpperCase()}
                             data={value}
@@ -79,6 +80,7 @@ export default function Data() {
                     )
                 })}
             </div>
+            <br /><br /><br />
         </div>
     )
 }

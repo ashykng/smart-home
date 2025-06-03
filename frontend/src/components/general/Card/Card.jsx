@@ -10,7 +10,7 @@ async function toggle(toggleApi) {
     }
 }
 
-export function CardDefault({ title, data, toggleApi, icon, safeMode }) {
+export function GeneralCard({ title, data, toggleApi, icon, safeMode }) {
     const isSafeModeCard = title.toLowerCase() === 'safemode'
     const canToggle = isSafeModeCard || !safeMode
     const isOn = data === true
