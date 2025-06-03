@@ -160,6 +160,33 @@ void setupRoutes() {
     request->send(200, "application/json", jsonResponse);
   });
 
+  server.on("/api/change/temp", HTTP_POST, [](AsyncWebServerRequest *request){},
+  NULL,
+  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    StaticJsonDocument<64> doc;
+    DeserializationError error = deserializeJson(doc, data);
+    temperatureLimit = doc["temperatureLimit"].as<int>();
+    StaticJsonDocument<64> json;
+    json["temperatureLimit"] = temperatureLimit;
+
+    String jsonResponse;
+    serializeJson(json, jsonResponse);
+    request->send(200, "application/json", jsonResponse);
+  });
+
+  server.on("/api/change/light", HTTP_POST, [](AsyncWebServerRequest *request){},
+  NULL,
+  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    StaticJsonDocument<64> doc;
+    DeserializationError error = deserializeJson(doc, data);
+    lightLevelLimit = doc["lightLevelLimit"].as<int>();
+    StaticJsonDocument<64> json;
+    json["lightLevelLimit"] = lightLevelLimit;
+
+    String jsonResponse;
+    serializeJson(json, jsonResponse);
+    request->send(200, "application/json", jsonResponse);
+  });
 }
 
 void readDHT(float &temperature, float &humidity) {
@@ -238,7 +265,7 @@ void ledFullColor(CRGB color) {
 void showFullStatus() {
   showTemperature(temperature);
   showState(buzzer, 7, red, white);
-  showState(heater, 6, maroon, blue);
+  showState(heater, 6, blue, red);
   showState(light, 5, yellow, turnOff);
   showState(safeMode, 4, green, red);
 }
