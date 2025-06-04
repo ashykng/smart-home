@@ -3,6 +3,7 @@ import axios from 'axios'
 import { endpoints } from '../../../config'
 
 import { GeneralCard } from '../general/Card/Card'
+import { GeneralSlider } from '../general/Slider/Slider'
 
 import { HiSpeakerWave } from "react-icons/hi2"
 import { FaLightbulb, FaTemperatureHigh, FaUserLock } from "react-icons/fa"
@@ -26,15 +27,22 @@ export default function Data() {
             toggleApi: endpoints.toggleLight,
             icon: <FaLightbulb className="text-yellow-500 w-6 h-6" />
         },
-        'heater': {
-            toggleApi: endpoints.toggleHeater,
-            icon: <LuHeater className="text-red-500 w-6 h-6" />
-        },
         'light Level': {
             icon: <FaLightbulb className="text-blue-500 w-6 h-6" />
         },
+        'light Level Limit': {
+            toggleApi: endpoints.toggleLight,
+            icon: <FaLightbulb className="text-red-500 w-6 h-6" />
+        },
+        'heater': {
+            toggleApi: endpoints.toggleHeater,
+            icon: <LuHeater className="text-yellow-500 w-6 h-6" />
+        },
         'temperature': {
             icon: <FaTemperatureHigh className="text-red-500 w-6 h-6" />
+        },
+        'temperature Limit': {
+            icon: <FaTemperatureHigh className="text-blue-500 w-6 h-6" />
         },
         'pressed Key': {
             icon: <FaKeyboard className="text-blue-500 w-6 h-6" />
@@ -81,6 +89,7 @@ export default function Data() {
                 })}
             </div>
             <br /><br /><br />
+            <GeneralSlider />
         </div>
     )
 }
