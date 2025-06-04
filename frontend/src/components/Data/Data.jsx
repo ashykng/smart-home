@@ -14,8 +14,8 @@ export default function Data() {
     const [data, setData] = useState({})
 
     const cardConfig = {
-        'safeMode': {
-            toggleApi: endpoints.toggleSafeMode,
+        'automatic Mode': {
+            toggleApi: endpoints.toggleAutomaticMode,
             icon: <FaUserLock className="w-6 h-6" />
         },
         'buzzer': {
@@ -74,7 +74,7 @@ export default function Data() {
                             data={value}
                             toggleApi={config.toggleApi || null}
                             icon={config.icon || null}
-                            safeMode={data.safeMode}
+                            automaticMode={data["automatic Mode"]}
                         />
 
                     )

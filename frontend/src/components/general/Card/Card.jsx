@@ -10,9 +10,9 @@ async function toggle(toggleApi) {
     }
 }
 
-export function GeneralCard({ title, data, toggleApi, icon, safeMode }) {
-    const isSafeModeCard = title.toLowerCase() === 'safemode'
-    const canToggle = isSafeModeCard || !safeMode
+export function GeneralCard({ title, data, toggleApi, icon, automaticMode }) {
+    const isAutomaticModeCard = title.toLowerCase() === 'automatic mode'
+    const canToggle = isAutomaticModeCard || !automaticMode
     const isOn = data === true
 
     return (
