@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { endpoints, API_URL } from '../../../config'
-import { CardDefault } from '../general/Card/Card'
+import { endpoints } from '../../../config'
+
+import { GeneralCard } from '../general/Card/Card'
+import { GeneralSlider } from '../general/Slider/Slider'
 
 import { HiSpeakerWave } from "react-icons/hi2"
 import { FaLightbulb, FaTemperatureHigh, FaUserLock } from "react-icons/fa"
@@ -11,29 +13,38 @@ import { LuHeater } from "react-icons/lu"
 
 export default function Data() {
     const [data, setData] = useState({})
+    const refreshDelay = 750;
 
     const cardConfig = {
-        'safeMode': {
-            toggleApi: `${API_URL}/toggle/safe`,
+        'automatic Mode': {
+            toggleApi: endpoints.toggleAutomaticMode,
             icon: <FaUserLock className="w-6 h-6" />
         },
         'buzzer': {
-            toggleApi: `${API_URL}/toggle/buzzer`,
+            toggleApi: endpoints.toggleBuzzer,
             icon: <HiSpeakerWave className="text-gray-600 w-6 h-6" />
         },
         'light': {
-            toggleApi: `${API_URL}/toggle/light`,
+            toggleApi: endpoints.toggleLight,
             icon: <FaLightbulb className="text-yellow-500 w-6 h-6" />
-        },
-        'heater': {
-            toggleApi: `${API_URL}/toggle/heater`,
-            icon: <LuHeater className="text-red-500 w-6 h-6" />
         },
         'light Level': {
             icon: <FaLightbulb className="text-blue-500 w-6 h-6" />
         },
+        'light Level Limit': {
+            submitApi: endpoints.changeLightLevelLimit,
+            icon: <FaLightbulb className="text-red-500 w-6 h-6" />
+        },
+        'heater': {
+            toggleApi: endpoints.toggleHeater,
+            icon: <LuHeater className="text-yellow-500 w-6 h-6" />
+        },
         'temperature': {
             icon: <FaTemperatureHigh className="text-red-500 w-6 h-6" />
+        },
+        'temperature Limit': {
+            submitApi: endpoints.changeTemperatureLimit,
+            icon: <FaTemperatureHigh className="text-blue-500 w-6 h-6" />
         },
         'pressed Key': {
             icon: <FaKeyboard className="text-blue-500 w-6 h-6" />
@@ -53,7 +64,7 @@ export default function Data() {
     }
 
     useEffect(() => {
-        const interval = setInterval(fetchData, 500)
+        const interval = setInterval(fetchData, refreshDelay)
         return () => clearInterval(interval)
     }, [])
 
@@ -67,17 +78,33 @@ export default function Data() {
                 {data && Object.entries(data).map(([key, value]) => {
                     const config = cardConfig[key] || {}
                     return (
-                        <CardDefault
+                        <GeneralCard
                             key={key}
                             title={key.toUpperCase()}
                             data={value}
                             toggleApi={config.toggleApi || null}
                             icon={config.icon || null}
-                            safeMode={data.safeMode}
+                            automaticMode={data["automatic Mode"]}
                         />
 
                     )
                 })}
+            </div>
+            <br />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {data && Object.entries(data).map(([key, value]) => {
+                    const config = cardConfig[key] || {}
+                    if (config.submitApi) {
+                        return (
+                            <GeneralSlider
+                                key={key}
+                                icon={config.icon || null}
+                                title={key.toUpperCase()}
+                                data={value}
+                                submitApi={config.submitApi || null}
+                            />
+                        )
+                    }})}
             </div>
         </div>
     )
