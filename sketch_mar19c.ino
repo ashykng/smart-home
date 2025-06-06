@@ -36,8 +36,8 @@ int lightLevel, pressedKey;
 bool buzzer = false;
 bool heater = false;
 bool light = false;
-bool safeMode = true;
-int temperatureLimit = 35;
+bool automaticMode = true;
+int temperatureLimit = 30;
 int lightLevelLimit = 30;
 
 void setup() {
@@ -63,7 +63,7 @@ void loop() {
   readDHT(temperature, humidity);
   readLDR(lightLevel);
 
-  checkLimits(temperatureLimit, lightLevelLimit);
+  if (automaticMode) checkLimits(temperatureLimit, lightLevelLimit);
 
   showFullStatus();
 
@@ -86,17 +86,18 @@ void toggleLight(bool &light) {
   light = !light;
 }
 
-void toggleSafeMode(bool &safeMode) {
-  safeMode = !safeMode;
+void toggleAutomaticMode(bool &automaticMode) {
+  automaticMode = !automaticMode;
 }
 
 void startServer() {
   WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
 
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, POST");
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "Content-Type");
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "http://192.168.4.2:5173");
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET");
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "content-type");
+  DefaultHeaders::Instance().addHeader("content-type", "application/json");
 
   setupRoutes();
 
@@ -106,13 +107,15 @@ void startServer() {
 void setupRoutes() {
   server.on("/api/data", HTTP_GET, [](AsyncWebServerRequest *request) {
     StaticJsonDocument<256> json;
-    json["safeMode"] = safeMode;
+    json["automatic Mode"] = automaticMode;
     json["buzzer"] = buzzer;
-    json["heater"] = heater;
+    json["pressed Key"] = pressedKey;
     json["light"] = light;
     json["light Level"] = String(lightLevel) + " %";
-    json["pressed Key"] = pressedKey;
+    json["light Level Limit"] = String(lightLevelLimit) + " %";
+    json["heater"] = !heater;
     json["temperature"] = String(temperature) + " °C";
+    json["temperature Limit"] = String(temperatureLimit) + " °C";
     json["humidity"] = String(humidity) + " %";
 
     String jsonResponse;
@@ -150,38 +153,34 @@ void setupRoutes() {
     request->send(200, "application/json", jsonResponse);
   });
 
-  server.on("/api/toggle/safe", HTTP_GET, [](AsyncWebServerRequest *request) {
-    toggleSafeMode(safeMode);
+  server.on("/api/toggle/automatic", HTTP_GET, [](AsyncWebServerRequest *request) {
+    toggleAutomaticMode(automaticMode);
     StaticJsonDocument<64> json;
-    json["safe"] = safeMode;
+    json["automatic"] = automaticMode;
 
     String jsonResponse;
     serializeJson(json, jsonResponse);
     request->send(200, "application/json", jsonResponse);
   });
 
-  server.on("/api/change/temp", HTTP_POST, [](AsyncWebServerRequest *request){},
-  NULL,
-  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-    StaticJsonDocument<64> doc;
-    DeserializationError error = deserializeJson(doc, data);
-    temperatureLimit = doc["temperatureLimit"].as<int>();
+  server.on("/api/change/temp", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String limitValue = request->getParam("limit")->value();
+    temperatureLimit = limitValue.toInt();
+
     StaticJsonDocument<64> json;
-    json["temperatureLimit"] = temperatureLimit;
+    json["limit"] = temperatureLimit;
 
     String jsonResponse;
     serializeJson(json, jsonResponse);
     request->send(200, "application/json", jsonResponse);
   });
 
-  server.on("/api/change/light", HTTP_POST, [](AsyncWebServerRequest *request){},
-  NULL,
-  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-    StaticJsonDocument<64> doc;
-    DeserializationError error = deserializeJson(doc, data);
-    lightLevelLimit = doc["lightLevelLimit"].as<int>();
+  server.on("/api/change/light", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String limitValue = request->getParam("limit")->value();
+    lightLevelLimit = limitValue.toInt();
+
     StaticJsonDocument<64> json;
-    json["lightLevelLimit"] = lightLevelLimit;
+    json["limit"] = lightLevelLimit;
 
     String jsonResponse;
     serializeJson(json, jsonResponse);
@@ -211,14 +210,14 @@ void readKeypad(int &pressedKey) {
 void keyFunctions(int &pressedKey) {
   if (pressedKey != -1)
 
-    if (!safeMode) {
+    if (!automaticMode) {
       if (pressedKey == 1) toggleBuzzer(buzzer);
       else if (pressedKey == 2) toggleHeater(heater);
       else if (pressedKey == 3) toggleLight(light);
-      else if (pressedKey == 8) toggleSafeMode(safeMode);
+      else if (pressedKey == 8) toggleAutomaticMode(automaticMode);
     }
 
-    else if (pressedKey == 8) toggleSafeMode(safeMode);
+    else if (pressedKey == 8) toggleAutomaticMode(automaticMode);
 
     else alarm();
 
@@ -237,8 +236,8 @@ void showTemperature(float &temperature) {
   }
 }
 
-void showSafeMode(bool &safeMode) {
-  if (safeMode) leds[4] = green;
+void showautomaticMode(bool &automaticMode) {
+  if (automaticMode) leds[4] = green;
 }
 
 void showState(bool &state, int led, CRGB onColor, CRGB offColor) {
@@ -267,7 +266,7 @@ void showFullStatus() {
   showState(buzzer, 7, red, white);
   showState(heater, 6, blue, red);
   showState(light, 5, yellow, turnOff);
-  showState(safeMode, 4, green, red);
+  showState(automaticMode, 4, green, red);
 }
 
 void alarm() {
@@ -279,6 +278,8 @@ void alarm() {
 
 void checkLimits(int &temperatureLimit, int &lightLevelLimit) {
   if (lightLevel < lightLevelLimit && !light) setLight(light, true);
+  else if (lightLevel > lightLevelLimit && light) setLight(light, false);
 
   if (temperature < temperatureLimit && !heater) setHeater(heater, true);
+  else if (temperature > temperatureLimit && heater) setHeater(heater, false);
 }
