@@ -31,7 +31,7 @@ export default function Data() {
             icon: <FaLightbulb className="text-blue-500 w-6 h-6" />
         },
         'light Level Limit': {
-            toggleApi: endpoints.toggleLight,
+            submitApi: endpoints.changeLightLevelLimit,
             icon: <FaLightbulb className="text-red-500 w-6 h-6" />
         },
         'heater': {
@@ -42,6 +42,7 @@ export default function Data() {
             icon: <FaTemperatureHigh className="text-red-500 w-6 h-6" />
         },
         'temperature Limit': {
+            submitApi: endpoints.changeTemperatureLimit,
             icon: <FaTemperatureHigh className="text-blue-500 w-6 h-6" />
         },
         'pressed Key': {
@@ -88,8 +89,22 @@ export default function Data() {
                     )
                 })}
             </div>
-            <br /><br /><br />
-            <GeneralSlider />
+            <br /><br />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {data && Object.entries(data).map(([key, value]) => {
+                    const config = cardConfig[key] || {}
+                    if (config.submitApi) {
+                        return (
+                            <GeneralSlider
+                                key={key}
+                                icon={config.icon || null}
+                                title={key.toUpperCase()}
+                                data={value}
+                                submitApi={config.submitApi || null}
+                            />
+                        )
+                    }})}
+            </div>
         </div>
     )
 }

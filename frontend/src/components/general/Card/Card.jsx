@@ -45,7 +45,7 @@ export function GeneralCard({ title, data, toggleApi, icon, automaticMode }) {
                         <button
                             onClick={() => canToggle && toggle(toggleApi)}
                             disabled={!canToggle}
-                            className={`px-4 py-1.5 text-sm font-medium rounded-md transition duration-200 ${
+                            className={`cursor-pointer px-4 py-1.5 text-sm font-medium rounded-md transition duration-200 ${
                                 canToggle
                                     ? 'bg-blue-600 text-white hover:bg-blue-700 shadow'
                                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
