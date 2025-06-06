@@ -13,6 +13,7 @@ import { LuHeater } from "react-icons/lu"
 
 export default function Data() {
     const [data, setData] = useState({})
+    const refreshDelay = 750;
 
     const cardConfig = {
         'automatic Mode': {
@@ -63,7 +64,7 @@ export default function Data() {
     }
 
     useEffect(() => {
-        const interval = setInterval(fetchData, 500)
+        const interval = setInterval(fetchData, refreshDelay)
         return () => clearInterval(interval)
     }, [])
 
@@ -89,7 +90,7 @@ export default function Data() {
                     )
                 })}
             </div>
-            <br /><br />
+            <br />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {data && Object.entries(data).map(([key, value]) => {
                     const config = cardConfig[key] || {}
