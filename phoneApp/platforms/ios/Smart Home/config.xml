@@ -26,12 +26,10 @@
         <param name="onload" value="true" />
     </feature>
     <name>Smart Home</name>
-    <description>Sample Apache Phone App</description>
-    <author email="ashkant939@gmail.com" href="https://cordova.apache.org">
-        Apache Cordova Team
-    </author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-intent href="*" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="DisallowOverscroll" value="false" />
     <preference name="EnableViewportScale" value="false" />
