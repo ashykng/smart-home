@@ -8,6 +8,10 @@
         "source": "com.ashkantavassoli.smarthome.app-main-28:/xml/config.xml"
     },
     {
+        "merged": "com.ashkantavassoli.smarthome.app-debug-26:/xml_network_security_config.xml.flat",
+        "source": "com.ashkantavassoli.smarthome.app-main-28:/xml/network_security_config.xml"
+    },
+    {
         "merged": "com.ashkantavassoli.smarthome.app-debug-26:/mipmap-mdpi_ic_launcher.jpg.flat",
         "source": "com.ashkantavassoli.smarthome.app-main-28:/mipmap-mdpi/ic_launcher.jpg"
     },
