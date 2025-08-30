@@ -29,12 +29,12 @@
 20-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:4:22-64
 21
 22    <queries>
-22-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:18:5-22:15
+22-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:16:5-20:15
 23        <intent>
-23-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:19:9-21:18
+23-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:17:9-19:18
 24            <action android:name="android.media.action.IMAGE_CAPTURE" />
-24-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:20:13-73
-24-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:20:21-70
+24-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:18:13-73
+24-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:18:21-70
 25        </intent>
 26    </queries>
 27
@@ -50,7 +50,7 @@
 32-->[androidx.core:core:1.13.0] /Users/ashykng/.gradle/caches/8.13/transforms/7c013e1f43d1815644395c70a32bee83/transformed/core-1.13.0/AndroidManifest.xml:26:22-94
 33
 34    <application
-34-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:5-17:15
+34-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:5-15:19
 35        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 35-->[androidx.core:core:1.13.0] /Users/ashykng/.gradle/caches/8.13/transforms/7c013e1f43d1815644395c70a32bee83/transformed/core-1.13.0/AndroidManifest.xml:28:18-86
 36        android:debuggable="true"
@@ -61,54 +61,56 @@
 39-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:53-87
 40        android:label="@string/app_name"
 40-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:88-120
-41        android:supportsRtl="true" >
-41-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:121-147
-42        android:networkSecurityConfig="@xml/network_security_config"
-43        android:usesCleartextTraffic="true"
+41        android:networkSecurityConfig="@xml/network_security_config"
+41-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:121-181
+42        android:supportsRtl="true"
+42-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:182-208
+43        android:usesCleartextTraffic="true" >
+43-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:5:209-244
 44        <activity
-44-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:17-13:20
+44-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:9-11:20
 45            android:name="com.ashkantavassoli.smarthome.MainActivity"
-45-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:248-275
+45-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:240-267
 46            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
-46-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:27-154
+46-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:19-146
 47            android:exported="true"
-47-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:155-178
+47-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:147-170
 48            android:label="@string/activity_name"
-48-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:179-216
+48-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:171-208
 49            android:launchMode="singleTop"
-49-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:217-247
+49-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:209-239
 50            android:theme="@style/Theme.App.SplashScreen"
-50-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:276-321
+50-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:268-313
 51            android:windowSoftInputMode="adjustResize" >
-51-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:322-364
+51-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:6:314-356
 52            <intent-filter android:label="@string/launcher_name" >
-52-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:9:13-12:29
-52-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:9:28-65
+52-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:7:13-10:29
+52-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:7:28-65
 53                <action android:name="android.intent.action.MAIN" />
-53-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:10:17-69
-53-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:10:25-66
+53-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:17-69
+53-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:8:25-66
 54
 55                <category android:name="android.intent.category.LAUNCHER" />
-55-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:11:17-77
-55-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:11:27-74
+55-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:9:17-77
+55-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:9:27-74
 56            </intent-filter>
 57        </activity>
 58
 59        <provider
 60            android:name="androidx.core.content.FileProvider"
-60-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:14:141-190
+60-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:12:141-190
 61            android:authorities="com.ashkantavassoli.smarthome.cdv.core.file.provider"
-61-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:14:19-80
+61-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:12:19-80
 62            android:exported="false"
-62-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:14:81-105
+62-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:12:81-105
 63            android:grantUriPermissions="true" >
-63-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:14:106-140
+63-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:12:106-140
 64            <meta-data
-64-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:15:13-130
+64-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:13:13-130
 65                android:name="android.support.FILE_PROVIDER_PATHS"
-65-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:15:24-74
+65-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:13:24-74
 66                android:resource="@xml/cdv_core_file_provider_paths" />
-66-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:15:75-127
+66-->/Users/ashykng/Projects/smart-home/phoneApp/platforms/android/app/src/main/AndroidManifest.xml:13:75-127
 67        </provider>
 68        <provider
 68-->[androidx.emoji2:emoji2:1.3.0] /Users/ashykng/.gradle/caches/8.13/transforms/537fe04c7b6e13d2c64226c263643d00/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
